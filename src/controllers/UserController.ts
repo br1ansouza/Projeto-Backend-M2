@@ -7,6 +7,29 @@ import { AppError } from '../utils/AppError';
 
 const userRepository = AppDataSource.getRepository(User);
 
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const user = await userRepository.findOne({
+      where: { id: Number(id) },
+      select: ["id", "name", "status", "profile"],
+    });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado.", 404);
+    }
+
+    res.status(200).json(user);
+    return;
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, profile, email, password, document, full_address } = req.body;

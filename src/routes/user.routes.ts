@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { createUser } from "../controllers/UserController";
+import { createUser, getUsers, getUserById } from "../controllers/UserController";
 import { adminAuthMiddleware } from "../middlewares/adminAuth";
-import { getUsers } from "../controllers/UserController";
+import { authMiddleware } from "../middlewares/auth";
+import { adminOrDriverMiddleware } from "../middlewares/adminOrDriverAuth";
 
 const userRouter = Router();
 
@@ -69,7 +70,7 @@ const userRouter = Router();
  *         description: E-mail já cadastrado.
  */
 userRouter.post("/", adminAuthMiddleware, createUser);
-
 userRouter.get("/", adminAuthMiddleware, getUsers);
+userRouter.get("/:id", getUsers);
 
 export default userRouter;

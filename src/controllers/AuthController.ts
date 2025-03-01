@@ -24,14 +24,19 @@ export const loginUser = async (
             throw new AppError("Credenciais inválidas.", 401);
         }
 
+        const tokenPayload = {
+          id: user.id,
+          profile: user.profile || "USER"
+        };
+        
         const token = jwt.sign(
-            { id: user.id, profile: user.profile },
-            process.env.JWT_SECRET as string,
-            { expiresIn: "1h" }
+          tokenPayload,
+          process.env.JWT_SECRET as string,
+          { expiresIn: "1h" }
         );
-
-        res.status(200).json({ token });
-    } catch (error) {
-        next(error);
-    }
-};
+                
+          res.status(200).json({ token });
+        } catch (error) {
+          next(error);
+        }
+      };

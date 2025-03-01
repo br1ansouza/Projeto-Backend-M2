@@ -15,10 +15,13 @@ app.use(cors());
 app.use(express.json());
 
 setupSwagger(app);
+app.use((req, res, next) => {
+  next();
+});
+
 
 app.use("/users", userRouter);
 app.use("/login", authRouter);
-
 app.use(handleError);
 
 AppDataSource.initialize()
