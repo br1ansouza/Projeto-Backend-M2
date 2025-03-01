@@ -1,0 +1,37 @@
+import { Request, Response, NextFunction } from "express";
+import { AppDataSource } from "../data-source";
+import { User } from "../entities/User";
+import jwt from "jsonwebtoken";
+import { AppError } from "../utils/AppError";
+
+const userRepository = AppDataSource.getRepository(User);
+
+export const loginUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            throw new AppError("E-mail e senha são obrigatórios.", 400);
+        }
+
+        const user = await userRepository.findOne({ where: { email } });
+
+        if (!user || user.password_hash !== password) {
+            throw new AppError("Credenciais inválidas.", 401);
+        }
+
+        const token = jwt.sign(
+            { id: user.id, profile: user.profile },
+            process.env.JWT_SECRET as string,
+            { expiresIn: "1h" }
+        );
+
+        res.status(200).json({ token });
+    } catch (error) {
+        next(error);
+    }
+};
