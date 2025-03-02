@@ -1,5 +1,4 @@
-# 📌 Projeto M2 - API de Gestão de Filiais e Produtos
-Módulo 2 - DEVinHouse [Clamed] V3
+# 📌 Projeto M2 - API de Gestão de Filiais e Produtos - Módulo 2 - DEVinHouse [Clamed] V3
 
 - 🚀 API desenvolvida em Node.js, TypeScript e TypeORM, utilizando PostgreSQL para armazenamento de dados.
 
