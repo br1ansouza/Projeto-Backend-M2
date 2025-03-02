@@ -7,6 +7,22 @@ import { AppError } from "../utils/AppError";
 const productRepository = AppDataSource.getRepository(Product);
 const branchRepository = AppDataSource.getRepository(Branch);
 
+export const listProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const products = await productRepository.find({
+      relations: ["branch"],
+    });
+
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createProduct = async (
   req: Request,
   res: Response,

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct } from "../controllers/ProductController";
+import { createProduct, listProducts } from "../controllers/ProductController";
 import { authMiddleware } from "../middlewares/auth";
 import { branchAuthMiddleware } from "../middlewares/branchAuth";
 
@@ -46,5 +46,22 @@ const productRouter = Router();
  *         description: Usuário sem permissão para criar produtos.
  */
 productRouter.post("/", authMiddleware, branchAuthMiddleware, createProduct);
+
+/**
+ * @swagger
+ * /products:
+ *   get:
+ *     summary: Lista todos os produtos cadastrados (Apenas para FILIAIS)
+ *     tags:
+ *       - Produtos
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Retorna a lista de produtos cadastrados.
+ *       403:
+ *         description: Acesso negado. Apenas filiais podem acessar esta rota.
+ */
+productRouter.get("/", authMiddleware, branchAuthMiddleware, listProducts);
 
 export default productRouter;
