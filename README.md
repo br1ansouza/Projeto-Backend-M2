@@ -1,26 +1,29 @@
-📌 Projeto M2 - API de Gestão de Filiais e Produtos
+# 📌 Projeto M2 - API de Gestão de Filiais e Produtos
 Módulo 2 - DEVinHouse [Clamed] V3
 
-🚀 API desenvolvida em Node.js, TypeScript e TypeORM, utilizando PostgreSQL para armazenamento de dados.
+- 🚀 API desenvolvida em Node.js, TypeScript e TypeORM, utilizando PostgreSQL para armazenamento de dados.
 
-🛠 Tecnologias Utilizadas
-Node.js
-Express
-TypeScript
-TypeORM
-PostgreSQL
-JWT (JSON Web Token)
-Bcrypt
-Swagger (Documentação da API)
+---
 
-📌 Steps to run this project
-Run npm i command
-Setup database settings inside .env file
-Run npm run start command
-A API será iniciada em:
+# 🛠 Tecnologias Utilizadas
+- Node.js
+- Express
+- TypeScript
+- TypeORM
+- PostgreSQL
+- JWT (JSON Web Token)
+- Bcrypt
+- Swagger (Documentação da API)
+
+- 📌 Steps to run this project
+1. Run npm i command
+2. Setup database settings inside .env file
+3. Run npm run start command
+
+- A API será iniciada em:
 ➡️ http://localhost:3000
 
-A documentação Swagger estará disponível em:
+- A documentação Swagger estará disponível em:
 📌 http://localhost:3000/api-docs/
 
 🔐 Autenticação
@@ -34,7 +37,7 @@ Para obter um token de acesso, é necessário realizar login na rota /login.
 
 ---
 
-📌 Rotas da API
+# 📌 Rotas da API
 
 ### 🔹 Autenticação (`/auth`)
 
@@ -58,7 +61,7 @@ Para obter um token de acesso, é necessário realizar login na rota /login.
 
 ---
 
-📖 Como Rodar o Projeto
+# 📖 Como Rodar o Projeto
 
 ## 1️⃣ Configurar o Banco de Dados
 Crie um banco de dados PostgreSQL e defina as credenciais no arquivo .env:
