@@ -126,3 +126,31 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
     next(error);
   }
 }
+
+export async function updateUserStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { id } = req.params;
+
+    const user = await userRepository.findOne({ where: { id: Number(id) } });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado.", 404);
+    }
+
+    if (!req.user || req.user.profile !== "ADMIN") {
+      throw new AppError("Apenas ADMIN pode alterar o status de um usuário.", 403);
+    }
+
+    user.status = !user.status;
+
+    await userRepository.save(user);
+
+    res.status(200).json({ message: "Status atualizado com sucesso." });
+  } catch (error) {
+    next(error);
+  }
+}
