@@ -16,6 +16,8 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
+  console.log("Authorization Header:", authHeader);
+
   if (!authHeader) {
     throw new AppError("Token não fornecido.", 401);
   }
@@ -24,11 +26,13 @@ export const authMiddleware = (
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    console.log("Decoded Token:", decoded);
 
     req.user = decoded as { id: number; profile: "ADMIN" | "DRIVER" | "BRANCH" };
 
     return next();
   } catch (error) {
+    console.error("Erro na autenticação:", error); 
     throw new AppError("Token inválido ou expirado.", 401);
   }
 };

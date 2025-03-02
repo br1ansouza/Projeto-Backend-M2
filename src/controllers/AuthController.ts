@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/User";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { AppError } from "../utils/AppError";
 
 const userRepository = AppDataSource.getRepository(User);
@@ -20,23 +21,28 @@ export const loginUser = async (
 
         const user = await userRepository.findOne({ where: { email } });
 
-        if (!user || user.password_hash !== password) {
+        if (!user) {
+            throw new AppError("Credenciais inválidas.", 401);
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+        if (!isPasswordValid) {
             throw new AppError("Credenciais inválidas.", 401);
         }
 
         const tokenPayload = {
-          id: user.id,
-          profile: user.profile || "USER"
+            id: user.id,
+            profile: user.profile || "USER"
         };
-        
+
         const token = jwt.sign(
-          tokenPayload,
-          process.env.JWT_SECRET as string,
-          { expiresIn: "1h" }
+            tokenPayload,
+            process.env.JWT_SECRET as string,
+            { expiresIn: "1h" }
         );
-                
-          res.status(200).json({ token });
-        } catch (error) {
-          next(error);
-        }
-      };
+
+        res.status(200).json({ token });
+    } catch (error) {
+        next(error);
+    }
+};

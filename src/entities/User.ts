@@ -20,6 +20,9 @@ export class User {
   @Column({ default: true })
   status: boolean;
 
+  @Column({ nullable: true })
+  full_address?: string;
+
   @CreateDateColumn()
   created_at: Date;
 
