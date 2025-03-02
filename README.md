@@ -35,17 +35,26 @@ Para obter um token de acesso, é necessário realizar login na rota /login.
 ---
 
 📌 Rotas da API
-🔹 Autenticação (/auth)
-Método	Endpoint	Descrição
-POST	/login	Autentica um usuário e retorna um token
-🔹 Usuários (/users)
-Método	Endpoint	Descrição
-POST	/users	Cadastro de um novo usuário (Apenas ADMIN)
-PATCH	/users/:id/status	Atualiza o status de um usuário (Apenas ADMIN)
-🔹 Produtos (/products)
-Método	Endpoint	Descrição
-POST	/products	Criação de um novo produto (Apenas FILIAIS)
-GET	/products	Retorna todos os produtos cadastrados (Apenas FILIAIS)
+
+### 🔹 Autenticação (`/auth`)
+
+| Método | Endpoint  | Descrição |
+|--------|----------|-----------|
+| `POST` | `/login` | Autentica um usuário e retorna um token |
+
+### 🔹 Usuários (`/users`)
+
+| Método  | Endpoint          | Descrição |
+|---------|------------------|-----------|
+| `POST`  | `/users`         | Cadastro de um novo usuário (Apenas ADMIN) |
+| `PATCH` | `/users/:id/status` | Atualiza o status de um usuário (Apenas ADMIN) |
+
+### 🔹 Produtos (`/products`)
+
+| Método | Endpoint     | Descrição |
+|--------|-------------|-----------|
+| `POST` | `/products` | Criação de um novo produto (Apenas FILIAIS) |
+| `GET`  | `/products` | Retorna todos os produtos cadastrados (Apenas FILIAIS) |
 
 ---
 
