@@ -23,10 +23,10 @@ Módulo 2 - DEVinHouse [Clamed] V3
 ---
 
 - A API será iniciada em:
-➡️ http://localhost:3000
+http://localhost:3000
 
 - A documentação Swagger estará disponível em:
-📌 http://localhost:3000/api-docs/
+http://localhost:3000/api-docs/
 
 ## 🔐 Autenticação
 A API utiliza JWT (JSON Web Token) para autenticação. Para acessar as rotas protegidas, é necessário incluir um token válido no Header Authorization.
