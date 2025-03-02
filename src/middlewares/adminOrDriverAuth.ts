@@ -10,17 +10,9 @@ export const adminOrDriverMiddleware = (
     throw new AppError("Usuário não autenticado.", 401);
   }
 
-  const user = req.user;
-  const requestedId = Number(req.params.id);
-
-
-
-  if (user.profile === "ADMIN") {
+  if (req.user.profile === "BRANCH" || req.user.profile === "DRIVER") {
     return next();
   }
 
-  if (user.profile === "DRIVER" && Number(user.id) === requestedId) {
-    return next();
-  }
-  throw new AppError("Não autorizado.", 403);
+  throw new AppError("Acesso negado. Apenas filiais e motoristas podem visualizar movimentações.", 403);
 };

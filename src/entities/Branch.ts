@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { User } from "./User";
 import { Product } from "./Product";
+import { Movement } from "./Movement";
 
 @Entity("branches")
 export class Branch {
@@ -18,4 +19,7 @@ export class Branch {
 
   @OneToMany(() => Product, (product) => product.branch)
   products: Product[];
+
+  @OneToMany(() => Movement, (movement) => movement.destinationBranch)
+  movements: Movement[];
 }

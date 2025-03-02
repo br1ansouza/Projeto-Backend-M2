@@ -9,6 +9,22 @@ const movementRepository = AppDataSource.getRepository(Movement);
 const productRepository = AppDataSource.getRepository(Product);
 const branchRepository = AppDataSource.getRepository(Branch);
 
+export const listMovements = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const movements = await movementRepository.find({
+      relations: ["product", "destinationBranch"],
+    });
+
+    res.status(200).json(movements);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createMovement = async (
   req: Request,
   res: Response,
@@ -36,6 +52,7 @@ export const createMovement = async (
 
     const product = await productRepository.findOne({
       where: { id: product_id, branch: { id: originBranchId } },
+      relations: ["branch"],
     });
 
     if (!product) {
@@ -55,7 +72,7 @@ export const createMovement = async (
     }
 
     const movement = movementRepository.create({
-      destination_branch: destinationBranch,
+      destinationBranch,
       product,
       quantity,
       status: "PENDING",
