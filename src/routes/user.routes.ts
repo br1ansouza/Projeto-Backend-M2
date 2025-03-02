@@ -3,6 +3,10 @@ import { createUser, getUsers, getUserById, updateUser, updateUserStatus } from 
 import { adminAuthMiddleware } from "../middlewares/adminAuth";
 import { authMiddleware } from "../middlewares/auth";
 import { adminOrDriverMiddleware } from "../middlewares/adminOrDriverAuth";
+import  productRouter  from "./product.routes";
+import { branchAuthMiddleware } from "../middlewares/branchAuth";
+import { createProduct } from "../controllers/ProductController";
+
 
 const userRouter = Router();
 
@@ -177,5 +181,47 @@ userRouter.put("/:id", authMiddleware, adminOrDriverMiddleware, updateUser);
  *         description: Usuário não encontrado.
  */
 userRouter.patch("/:id/status", authMiddleware, adminAuthMiddleware, updateUserStatus);
+
+/**
+ * @swagger
+ * /products:
+ *   post:
+ *     summary: Criação de um novo produto (Apenas Filial)
+ *     tags:
+ *       - Produtos
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - amount
+ *               - description
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Produto Exemplo"
+ *               amount:
+ *                 type: integer
+ *                 example: 10
+ *               description:
+ *                 type: string
+ *                 example: "Descrição do produto"
+ *               url_cover:
+ *                 type: string
+ *                 example: "http://imagem.com/produto.jpg"
+ *     responses:
+ *       201:
+ *         description: Produto criado com sucesso.
+ *       400:
+ *         description: Dados inválidos.
+ *       401:
+ *         description: Usuário não autenticado.
+ */
+productRouter.post("/", authMiddleware, branchAuthMiddleware, createProduct);
 
 export default userRouter;

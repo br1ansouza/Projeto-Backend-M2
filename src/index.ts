@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.routes";
 import { handleError } from "./middlewares/handleError";
 import { setupSwagger } from "./config/swagger";
 import logger from "./config/winston";
+import productRouter from "./routes/product.routes";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 
 app.use("/users", userRouter);
 app.use("/login", authRouter);
+app.use("/products", productRouter);
 app.use(handleError);
 
 AppDataSource.initialize()

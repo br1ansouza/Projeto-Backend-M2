@@ -8,6 +8,7 @@ import { DataSource } from "typeorm";
 import { User } from "./entities/User";
 import { Driver } from "./entities/Driver";
 import { Branch } from "./entities/Branch";
+import { Product } from "./entities/Product";
 
 export const AppDataSource: DataSource = new DataSource({
     type: "postgres",
@@ -18,7 +19,7 @@ export const AppDataSource: DataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: process.env.NODE_ENV === 'development',
     logging: process.env.NODE_ENV === 'development',
-    entities: [User, Driver, Branch],
+    entities: [User, Driver, Branch, Product],
     migrations: ["src/migrations/*.ts"],
     subscribers: [],
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
