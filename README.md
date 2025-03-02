@@ -15,10 +15,12 @@ Módulo 2 - DEVinHouse [Clamed] V3
 - Bcrypt
 - Swagger (Documentação da API)
 
-- 📌 Steps to run this project
+## 📌 Steps to run this project
 1. Run npm i command
 2. Setup database settings inside .env file
 3. Run npm run start command
+
+---
 
 - A API será iniciada em:
 ➡️ http://localhost:3000
@@ -26,7 +28,7 @@ Módulo 2 - DEVinHouse [Clamed] V3
 - A documentação Swagger estará disponível em:
 📌 http://localhost:3000/api-docs/
 
-🔐 Autenticação
+## 🔐 Autenticação
 A API utiliza JWT (JSON Web Token) para autenticação. Para acessar as rotas protegidas, é necessário incluir um token válido no Header Authorization.
 
 Exemplo de uso do token:
