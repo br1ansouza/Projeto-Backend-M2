@@ -90,31 +90,88 @@ export const createMovement = async (
 };
 
 export const startMovement = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { id } = req.params;
-
-    const movement = await movementRepository.findOne({
-      where: { id: Number(id) },
-      relations: ["product", "destinationBranch"],
-    });
-
-    if (!movement) {
-      throw new AppError("Movimentação não encontrada.", 404);
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { id } = req.params;
+  
+      if (!req.user) {
+        throw new AppError("Usuário não autenticado.", 401);
+      }
+  
+      if (req.user.profile !== "DRIVER") {
+        throw new AppError("Apenas motoristas podem iniciar movimentações.", 403);
+      }
+  
+      const movement = await movementRepository.findOne({
+        where: { id: Number(id) },
+        relations: ["product", "destinationBranch"],
+      });
+  
+      if (!movement) {
+        throw new AppError("Movimentação não encontrada.", 404);
+      }
+  
+      if (movement.status !== "PENDING") {
+        throw new AppError("A movimentação já foi iniciada ou finalizada.", 400);
+      }
+  
+      movement.status = "IN_PROGRESS";
+      movement.driver = req.user;
+      await movementRepository.save(movement);
+  
+      res.status(200).json(movement);
+    } catch (error) {
+      next(error);
     }
+  };  
 
-    if (movement.status !== "PENDING") {
-      throw new AppError("A movimentação já foi iniciada ou finalizada.", 400);
+  export const endMovement = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { id } = req.params;
+  
+      if (!req.user) {
+        throw new AppError("Usuário não autenticado.", 401);
+      }
+  
+      const movement = await movementRepository.findOne({
+        where: { id: Number(id) },
+        relations: ["product", "destinationBranch", "driver"],
+      });
+  
+      if (!movement) {
+        throw new AppError("Movimentação não encontrada.", 404);
+      }
+  
+      if (movement.status === "FINISHED") {
+        throw new AppError("Movimentação já foi finalizada.", 400);
+      }
+  
+      if (!movement.driver || movement.driver.id !== req.user.id) {
+        throw new AppError("Usuário não autorizado para finalizar esta movimentação.", 403);
+      }
+  
+      movement.status = "FINISHED";
+      await movementRepository.save(movement);
+  
+      const newProduct = productRepository.create({
+        name: movement.product.name,
+        amount: movement.quantity,
+        description: movement.product.description,
+        url_cover: movement.product.url_cover,
+        branch: movement.destinationBranch,
+      });
+  
+      await productRepository.save(newProduct);
+  
+      res.status(200).json(movement);
+    } catch (error) {
+      next(error);
     }
-
-    movement.status = "IN_PROGRESS";
-    await movementRepository.save(movement);
-
-    res.status(200).json(movement);
-  } catch (error) {
-    next(error);
-  }
-};
+  };

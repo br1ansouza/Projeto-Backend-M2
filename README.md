@@ -16,17 +16,19 @@ Módulo 2 - DEVinHouse [Clamed] V3
 - Swagger (Documentação da API)
 
 ## 📌 Steps to run this project
-1. Run npm i command
-2. Setup database settings inside .env file
-3. Run npm run start command
+1. Run `npm install` command
+2. Setup database settings inside `.env` file
+3. Run `npm run start` command
 
 ---
 
 - A API será iniciada em:
-http://localhost:3000
+  - 📍 http://localhost:3000
 
 - A documentação Swagger estará disponível em:
-http://localhost:3000/api-docs/
+  - 📄 http://localhost:3000/api-docs/
+
+---
 
 ## 🔐 Autenticação
 A API utiliza JWT (JSON Web Token) para autenticação. Para acessar as rotas protegidas, é necessário incluir um token válido no Header Authorization.
@@ -41,25 +43,32 @@ Para obter um token de acesso, é necessário realizar login na rota /login.
 
 # 📌 Rotas da API
 
-### 🔹 Autenticação (`/auth`)
-
+## 🔹 **Autenticação (`/auth`)**
 | Método | Endpoint  | Descrição |
 |--------|----------|-----------|
-| `POST` | `/login` | Autentica um usuário e retorna um token |
+| `POST` | `/auth/login` | Autentica um usuário e retorna um token |
 
-### 🔹 Usuários (`/users`)
-
+## 🔹 **Usuários (`/users`)**
 | Método  | Endpoint          | Descrição |
 |---------|------------------|-----------|
 | `POST`  | `/users`         | Cadastro de um novo usuário (Apenas ADMIN) |
 | `PATCH` | `/users/:id/status` | Atualiza o status de um usuário (Apenas ADMIN) |
 
-### 🔹 Produtos (`/products`)
-
+## 🔹 **Produtos (`/products`)**
 | Método | Endpoint     | Descrição |
 |--------|-------------|-----------|
 | `POST` | `/products` | Criação de um novo produto (Apenas FILIAIS) |
 | `GET`  | `/products` | Retorna todos os produtos cadastrados (Apenas FILIAIS) |
+
+---
+
+## 🔹 **Movimentações (`/movements`)**
+| Método  | Endpoint                  | Descrição |
+|---------|--------------------------|-----------|
+| `POST`  | `/movements`              | Criar uma nova movimentação (Apenas FILIAIS) |
+| `GET`   | `/movements`              | Lista todas as movimentações (Apenas FILIAIS e MOTORISTAS) |
+| `PATCH` | `/movements/:id/start`    | Inicia a movimentação (Apenas para MOTORISTAS) |
+| `PATCH` | `/movements/:id/end`      | Finaliza a movimentação e transfere o estoque (Apenas MOTORISTA que iniciou a viagem) |
 
 ---
 
@@ -116,4 +125,60 @@ Authorization: Bearer <TOKEN>
 🔹 Listar Produtos
 Requisição GET /products (Apenas FILIAL).
 
+🔹 Criar uma Movimentação
+Requisição POST /movements (Apenas FILIAL):
+```
+{
+  "destination_branch_id": 2,
+  "product_id": 1,
+  "quantity": 5
+}
+```
+
+Headers:
+```
+Authorization: Bearer <TOKEN_FILIAL>
+```
+
+🔹 Iniciar uma Movimentação
+
+Requisição PATCH /movements/:id/start (Apenas MOTORISTAS):
+```
+PATCH /movements/1/start
+```
+
+Headers:
+```
+Authorization: Bearer <TOKEN_MOTORISTA>
+```
+
+🔹 Finalizar uma Movimentação
+
+Requisição PATCH /movements/:id/end (Apenas MOTORISTA que iniciou a viagem):
+```
+PATCH /movements/1/end
+```
+
+Headers:
+```
+Authorization: Bearer <TOKEN_MOTORISTA>
+```
+Quando finalizado:
+
+- A movimentação terá o status FINISHED.
+- Um novo produto será criado na filial de destino com a quantidade movimentada.
+
 ---
+
+📌 Observações Importantes
+
+- Apenas FILIAIS podem criar movimentações
+- Apenas MOTORISTAS podem iniciar e finalizar movimentações
+- O motorista que iniciou a movimentação deve ser o mesmo a finalizá-la
+- Ao finalizar, o produto é transferido para a filial de destino
+
+---
+
+🚀 Conclusão
+
+Essa API foi desenvolvida para gerenciar usuários, produtos e movimentações de forma segura e eficiente. Todos os endpoints seguem as regras de autenticação e autorização definidas, garantindo que cada perfil de usuário tenha acesso apenas às operações permitidas.

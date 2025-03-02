@@ -9,19 +9,24 @@ import {
 } from "typeorm";
 import { Branch } from "./Branch";
 import { Product } from "./Product";
+import { User } from "./User";
 
 @Entity("movements")
 export class Movement {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Branch, (branch) => branch.movements, { eager: true })
+    @ManyToOne(() => Branch, { eager: true })
     @JoinColumn({ name: "destination_branch_id" })
     destinationBranch: Branch;
 
-    @ManyToOne(() => Product, (product) => product.movements, { eager: true })
+    @ManyToOne(() => Product, { eager: true })
     @JoinColumn({ name: "product_id" })
     product: Product;
+
+    @ManyToOne(() => User, { eager: true, nullable: true })
+    @JoinColumn({ name: "driver_id" })
+    driver: User;
 
     @Column({ type: "int" })
     quantity: number;

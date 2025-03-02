@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { createMovement, listMovements, startMovement } from "../controllers/MovementController";
+import { 
+    createMovement, 
+    listMovements, 
+    startMovement, 
+    endMovement 
+} from "../controllers/MovementController";
 import { authMiddleware } from "../middlewares/auth";
 import { branchAuthMiddleware } from "../middlewares/branchAuth";
 import { adminOrDriverMiddleware } from "../middlewares/adminOrDriverAuth";
@@ -88,5 +93,31 @@ movementRouter.get("/", authMiddleware, adminOrDriverMiddleware, listMovements);
  *         description: Movimentação não encontrada.
  */
 movementRouter.patch("/:id/start", authMiddleware, driverAuthMiddleware, startMovement);
+
+/**
+ * @swagger
+ * /movements/{id}/end:
+ *   patch:
+ *     summary: Finaliza a movimentação e transfere os produtos para a filial de destino (Apenas para MOTORISTA que iniciou a viagem)
+ *     tags:
+ *       - Movimentações
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID da movimentação a ser finalizada
+ *     responses:
+ *       200:
+ *         description: Movimentação finalizada com sucesso e produtos transferidos.
+ *       403:
+ *         description: Usuário sem permissão para finalizar movimentações.
+ *       404:
+ *         description: Movimentação não encontrada.
+ */
+movementRouter.patch("/:id/end", authMiddleware, driverAuthMiddleware, endMovement);
 
 export default movementRouter;

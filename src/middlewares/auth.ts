@@ -9,11 +9,7 @@ const userRepository = AppDataSource.getRepository(User);
 declare global {
   namespace Express {
     interface Request {
-      user?: { 
-        id: number; 
-        profile: "ADMIN" | "DRIVER" | "BRANCH"; 
-        branch_id?: number; 
-      };
+      user?: User;
     }
   }
 }
@@ -34,24 +30,18 @@ export const authMiddleware = async (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
       id: number;
-      profile: "ADMIN" | "DRIVER" | "BRANCH";
     };
 
     const user = await userRepository.findOne({
       where: { id: decoded.id },
       relations: ["branch"],
     });
-    
+
     if (!user) {
       throw new AppError("Usuário não encontrado.", 404);
     }
-    
-    req.user = {
-      id: user.id,
-      profile: user.profile,
-      branch_id: user.branch?.id ?? null,
-    };
-    
+
+    req.user = user;
 
     return next();
   } catch (error) {
