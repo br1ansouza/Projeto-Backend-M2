@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { 
+  Entity, 
+  PrimaryGeneratedColumn, 
+  Column, 
+  CreateDateColumn, 
+  UpdateDateColumn, 
+  ManyToOne, 
+  JoinColumn 
+} from "typeorm";
+import { Branch } from "./Branch";
 
 @Entity("users")
 export class User {
@@ -20,9 +29,20 @@ export class User {
   @Column({ default: true })
   status: boolean;
 
+  @Column({ nullable: true })
+  full_address?: string;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Column({ nullable: true })
+  branch_id?: number;
+
+  @ManyToOne(() => Branch, (branch) => branch.users, { nullable: true })
+@JoinColumn({ name: "branch_id" })
+branch: Branch;
+
 }

@@ -1,17 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { User } from './User';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { User } from "./User";
+import { Product } from "./Product";
+import { Movement } from "./Movement";
 
-@Entity('branches')
+@Entity("branches")
 export class Branch {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  full_address: string;
+  @Column({ length: 200 })
+  name: string;
 
-  @Column({ unique: true })
-  document: string;
+  @Column({ length: 200 })
+  address: string;
 
-  @ManyToOne(() => User, (user) => user.id)
-  user_id: User;
+  @OneToMany(() => User, (user) => user.branch)
+  users: User[];
+
+  @OneToMany(() => Product, (product) => product.branch)
+  products: Product[];
+
+  @OneToMany(() => Movement, (movement) => movement.destinationBranch)
+  movements: Movement[];
 }
