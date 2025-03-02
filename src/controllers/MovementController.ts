@@ -88,3 +88,33 @@ export const createMovement = async (
     next(error);
   }
 };
+
+export const startMovement = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const movement = await movementRepository.findOne({
+      where: { id: Number(id) },
+      relations: ["product", "destinationBranch"],
+    });
+
+    if (!movement) {
+      throw new AppError("Movimentação não encontrada.", 404);
+    }
+
+    if (movement.status !== "PENDING") {
+      throw new AppError("A movimentação já foi iniciada ou finalizada.", 400);
+    }
+
+    movement.status = "IN_PROGRESS";
+    await movementRepository.save(movement);
+
+    res.status(200).json(movement);
+  } catch (error) {
+    next(error);
+  }
+};

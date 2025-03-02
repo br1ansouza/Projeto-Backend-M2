@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { createMovement } from "../controllers/MovementController";
+import { createMovement, listMovements, startMovement } from "../controllers/MovementController";
 import { authMiddleware } from "../middlewares/auth";
 import { branchAuthMiddleware } from "../middlewares/branchAuth";
 import { adminOrDriverMiddleware } from "../middlewares/adminOrDriverAuth";
-import { listMovements } from "../controllers/MovementController";
+import { driverAuthMiddleware } from "../middlewares/driverAuthMiddleware";
 
 const movementRouter = Router();
 
@@ -62,5 +62,31 @@ movementRouter.post("/", authMiddleware, branchAuthMiddleware, createMovement);
  *         description: Usuário sem permissão para visualizar movimentações.
  */
 movementRouter.get("/", authMiddleware, adminOrDriverMiddleware, listMovements);
+
+/**
+ * @swagger
+ * /movements/{id}/start:
+ *   patch:
+ *     summary: Inicia a movimentação (Apenas para MOTORISTAS)
+ *     tags:
+ *       - Movimentações
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID da movimentação a ser iniciada
+ *     responses:
+ *       200:
+ *         description: Movimentação iniciada com sucesso.
+ *       403:
+ *         description: Usuário sem permissão para iniciar movimentações.
+ *       404:
+ *         description: Movimentação não encontrada.
+ */
+movementRouter.patch("/:id/start", authMiddleware, driverAuthMiddleware, startMovement);
 
 export default movementRouter;
