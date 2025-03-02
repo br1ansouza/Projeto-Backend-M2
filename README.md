@@ -59,7 +59,8 @@ Para obter um token de acesso, é necessário realizar login na rota /login.
 ---
 
 📖 Como Rodar o Projeto
-1️⃣ Configurar o Banco de Dados
+
+## 1️⃣ Configurar o Banco de Dados
 Crie um banco de dados PostgreSQL e defina as credenciais no arquivo .env:
 ```
 DB_HOST=localhost
@@ -70,18 +71,19 @@ DB_NAME=projeto-m2
 JWT_SECRET=seuSegredoJWT
 ```
 
-2️⃣ Instalar Dependências
+## 2️⃣ Instalar Dependências
 ```npm install```
 
-3️⃣ Executar Migrations
+## 3️⃣ Executar Migrations
 ```npm run typeorm -- -d src/data-source.ts migration:run```
 
-4️⃣ Iniciar o Servidor
+## 4️⃣ Iniciar o Servidor
 ```npm run start```
-O servidor será iniciado em http://localhost:3000.
+
+- O servidor será iniciado em http://localhost:3000.
 
 ---
-📌 Como Testar a API
+# 📌 Como Testar a API
 🔹 Obter Token (Login)
 Faça uma requisição POST /login com:
 ```
