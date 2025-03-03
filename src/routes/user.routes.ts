@@ -6,7 +6,7 @@ import { adminOrDriverMiddleware } from "../middlewares/adminOrDriverAuth";
 import  productRouter  from "./product.routes";
 import { branchAuthMiddleware } from "../middlewares/branchAuth";
 import { createProduct } from "../controllers/ProductController";
-
+import { resetPassword } from "../controllers/UserController";
 
 const userRouter = Router();
 
@@ -223,5 +223,44 @@ userRouter.patch("/:id/status", authMiddleware, adminAuthMiddleware, updateUserS
  *         description: Usuário não autenticado.
  */
 productRouter.post("/", authMiddleware, branchAuthMiddleware, createProduct);
+
+/**
+ * @swagger
+ * /users/reset-password:
+ *   post:
+ *     summary: Redefine a senha do usuário
+ *     tags:
+ *       - Usuários
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - newPassword
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "usuario@email.com"
+ *               newPassword:
+ *                 type: string
+ *                 minLength: 6
+ *                 maxLength: 20
+ *                 example: "novaSenha123"
+ *     responses:
+ *       200:
+ *         description: Senha redefinida com sucesso.
+ *       400:
+ *         description: Dados inválidos.
+ *       404:
+ *         description: Usuário não encontrado.
+ */
+
+userRouter.post("/reset-password", resetPassword);
 
 export default userRouter;
