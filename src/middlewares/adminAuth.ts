@@ -5,6 +5,5 @@ export const adminAuthMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("Autenticação desativada temporariamente.");
   next();
 };

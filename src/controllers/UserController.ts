@@ -7,17 +7,19 @@ import { AppError } from '../utils/AppError';
 
 const userRepository = AppDataSource.getRepository(User);
 
-export async function getUserById(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const user = await userRepository.findOne({
-      where: { id: Number(id) },
-      select: ["id", "name", "status", "profile"],
-    });
+
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado.", 401);
+    }
+
+    if (req.user.profile !== "ADMIN" && req.user.id !== Number(id)) {
+      throw new AppError("Acesso negado. Apenas ADMIN ou o próprio usuário podem visualizar os dados.", 403);
+    }
+
+    const user = await userRepository.findOne({ where: { id: Number(id) } });
 
     if (!user) {
       throw new AppError("Usuário não encontrado.", 404);
@@ -27,7 +29,8 @@ export async function getUserById(
   } catch (error) {
     next(error);
   }
-}
+};
+
 
 export async function createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -101,8 +104,8 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
     }
 
     if (req.user.profile !== "ADMIN" && req.user.id !== Number(id)) {
-      throw new AppError("Acesso negado.", 401);
-    }
+      throw new AppError("Acesso negado.", 403);
+    }    
 
     if (name) user.name = name;
     if (full_address) user.full_address = full_address;

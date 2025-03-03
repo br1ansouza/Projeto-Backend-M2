@@ -108,7 +108,7 @@ userRouter.get("/", authMiddleware, adminAuthMiddleware, getUsers);
  *       404:
  *         description: Usuário não encontrado.
  */
-userRouter.get("/:id", authMiddleware, adminOrDriverMiddleware, getUserById);
+userRouter.get("/:id", authMiddleware, getUserById);
 
 /**
  * @swagger
@@ -153,7 +153,7 @@ userRouter.get("/:id", authMiddleware, adminOrDriverMiddleware, getUserById);
  *       404:
  *         description: Usuário não encontrado.
  */
-userRouter.put("/:id", authMiddleware, adminOrDriverMiddleware, updateUser);
+userRouter.put("/:id", authMiddleware, updateUser);
 
 /**
  * @swagger
