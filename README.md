@@ -42,10 +42,10 @@ Para obter um token de acesso, é necessário realizar login na rota /login.
 
 # 📌 Rotas da API
 
-## 🔹 **Autenticação (`/auth`)**
+## 🔹 **Autenticação (`/login`)**
 | Método | Endpoint  | Descrição |
 |--------|----------|-----------|
-| `POST` | `/auth/login` | Autentica um usuário e retorna um token |
+| `POST` | `/login` | Autentica um usuário e retorna um token |
 
 ## 🔹 **Usuários (`/users`)**
 | Método  | Endpoint          | Descrição |
