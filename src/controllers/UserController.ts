@@ -31,6 +31,24 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+export async function resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { email, newPassword } = req.body;
+
+    const user = await userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado.", 404);
+    }
+
+    user.password_hash = await bcrypt.hash(newPassword, 10);
+    await userRepository.save(user);
+
+    res.status(200).json({ message: "Senha redefinida com sucesso." });
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
