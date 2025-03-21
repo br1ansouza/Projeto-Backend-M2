@@ -1,4 +1,4 @@
-# 📌 Projeto M2 - API de Gestão de Filiais e Produtos
+# 📌 Projeto - API de Gestão de Filiais e Produtos
 
 - 🚀 API desenvolvida em Node.js, TypeScript e TypeORM, utilizando PostgreSQL para armazenamento de dados.
 
